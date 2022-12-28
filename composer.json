@@ -1,0 +1,22 @@
+{
+    "name": "jscomp/creator",
+    "autoload": {
+        "psr-4": {
+            "JsCompCreator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Atakan Senturk",
+            "email": "atkansenturk@protonmail.com"
+        }
+    ],
+    "require": {},
+    "extra": {
+        "laravel" : {
+            "providers": [
+                "JsCompCreator\\Provider\\ComponentCreateServiceProvider"
+            ]
+        }
+    }
+}
