@@ -32,10 +32,10 @@ class ComponentCreateCommand extends GeneratorCommand
     protected function getStub()
     {
         return [
-            'vue' => base_path('/package/atakansn/jscompcreator/src/stubs/vue_option_api.stub'),
-            'vue_comp' => base_path('/package/atakansn/jscompcreator/src/stubs/vue_composition_api.stub'),
-            'react' => base_path('/package/atakansn/jscompcreator/src/stubs/react.stub'),
-            'svelte' => base_path('/package/atakansn/jscompcreator/src/stubs/svelte.stub'),
+            'vue' => __DIR__ . '/../stubs/vue_option_api.stub',
+            'vue_comp' => __DIR__ . '/../stubs/vue_composition_api.stub',
+            'react' => __DIR__ . '/../stubs/react.stub',
+            'svelte' => __DIR__ . '/../src/stubs/svelte.stub',
         ];
     }
 
@@ -46,6 +46,7 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     public function handle()
     {
+
         $this->componentsPathExists();
 
         match ($this->argument('libraryName')) {
