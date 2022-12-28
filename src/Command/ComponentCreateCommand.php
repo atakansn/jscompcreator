@@ -29,7 +29,7 @@ class ComponentCreateCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getStub()
+    protected function getStub(): array
     {
         return [
             'vue' => __DIR__ . '/../stubs/vue_option_api.stub',
