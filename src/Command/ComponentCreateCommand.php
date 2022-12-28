@@ -23,7 +23,6 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     protected $description = 'It creates components of Javascript frameworks.';
 
-
     /**
      * File structures of components.
      *
@@ -46,7 +45,6 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     public function handle()
     {
-
         $this->componentsPathExists();
 
         match ($this->argument('libraryName')) {
@@ -78,7 +76,7 @@ class ComponentCreateCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function componentsPath()
+    protected function componentsPath(): string
     {
         return resource_path('js/Components');
     }
