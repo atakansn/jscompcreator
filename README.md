@@ -30,11 +30,13 @@ php artisan component:create BazComponent react
 ```php
 php artisan component:create ExampleComponent svelte
 ```
+<hr>
 
 ```php
 php artisan component:create <1:componentName> <2:libraryName> <--C|compositionApi>
 ```
 
-- 1 componentName: Name of component.
-- 2 libraryName: The Javascript framework using.
-- 3 compositionApi: If you are using vue js, if you do not specify --option it will create the option api component, if you use the --option it will create the composition api component
+### Argument Descriptions
+- <strong>componentName:</strong> Name of component.
+- <strong>libraryName:</strong> The Javascript framework using.
+- <strong>compositionApi:</strong> If you are using vue js, if you do not specify --option it will create the option api component, if you use the --option it will create the composition api component

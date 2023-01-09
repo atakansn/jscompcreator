@@ -34,7 +34,7 @@ class ComponentCreateCommand extends GeneratorCommand
             'vue' => __DIR__ . '/../stubs/vue_option_api.stub',
             'vue_comp' => __DIR__ . '/../stubs/vue_composition_api.stub',
             'react' => __DIR__ . '/../stubs/react.stub',
-            'svelte' => __DIR__ . '/../src/stubs/svelte.stub',
+            'svelte' => __DIR__ . '/../stubs/svelte.stub',
         ];
     }
 
@@ -62,7 +62,7 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     protected function componentsPathExists()
     {
-        $path = $this->componentsPath();
+        $path = $this->getComponentsPath();
 
         if (!$this->files->exists($path)) {
             $this->files->makeDirectory($path);
@@ -76,7 +76,7 @@ class ComponentCreateCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function componentsPath(): string
+    protected function getComponentsPath(): string
     {
         return resource_path('js/Components');
     }
@@ -89,7 +89,7 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     protected function existsComponentFile(string $name)
     {
-        $exists = $this->files->exists("{$this->componentsPath()}/$name");
+        $exists = $this->files->exists("{$this->getComponentsPath()}/$name");
 
         if ($exists) {
             $this->components->error('This file is exists!');
@@ -107,22 +107,7 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     protected function createVueComponent()
     {
-        $name = "{$this->argument('componentName')}.vue";
-
-        $this->existsComponentFile($name);
-
-        $path = "{$this->componentsPath()}/$name";
-
-        if ($this->option('compositionApi')) {
-            $this->files->put($path, file_get_contents($this->getStub()['vue_comp']));
-            $this->components->info("[Composition Api] [$name] successfully created. [$path]");
-            exit;
-        }
-
-        $this->components->info("[$name] successfully created. [$path]");
-
-        $this->files->put("{$this->componentsPath()}/$name", file_get_contents($this->getStub()['vue']));
-
+        $this->fileGenerateHelper('vue','vue');
     }
 
     /**
@@ -132,20 +117,7 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     protected function createReactComponent()
     {
-        $componentName = $this->argument('componentName');
-
-        $name = "{$componentName}.jsx";
-
-        $this->existsComponentFile($name);
-
-        $path = "{$this->componentsPath()}/$name";
-
-        $content = file_get_contents($this->getStub()['react']);
-
-        $this->components->info("[$name] successfully created. [$path]");
-
-        $this->files->put($path, str_replace('{{componentName}}', $componentName, $content));
-
+        $this->fileGenerateHelper('react', 'jsx');
     }
 
     /**
@@ -155,17 +127,36 @@ class ComponentCreateCommand extends GeneratorCommand
      */
     protected function createSvelteComponent()
     {
-        $name = "{$this->argument('componentName')}.svelte";
+        $this->fileGenerateHelper('svelte', 'svelte');
+    }
+
+    private function fileGenerateHelper(string $libraryName, string $extension)
+    {
+        $name = "{$this->argument('componentName')}.{$extension}";
 
         $this->existsComponentFile($name);
 
-        $path = "{$this->componentsPath()}/$name";
+        $path = "{$this->getComponentsPath()}/$name";
 
-        $content = file_get_contents($this->getStub()['svelte']);
+        $content = file_get_contents($this->getStub()[$libraryName]);
 
-        $this->components->info("[$name] successfully created. [$path]");
+        if ($extension === 'jsx' && $libraryName === 'react') {
+            $componentName = "{$this->argument('componentName')}";
+            $content = file_get_contents($this->getStub()[$libraryName]);
+            $this->files->put($path, str_replace('{{componentName}}', $componentName, $content));
+            $this->components->info("[$name] successfully created. [$path]");
+            exit;
+        }
+
+        if ($this->option('compositionApi')) {
+            $this->files->put($path, file_get_contents($this->getStub()['vue_comp']));
+            $this->components->info("[Composition Api] [$name] successfully created. [$path]");
+            exit;
+        }
 
         $this->files->put($path, $content);
+
+        $this->components->info("[$name] successfully created. [$path]");
     }
 
 }
